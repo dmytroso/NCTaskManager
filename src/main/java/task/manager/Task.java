@@ -78,4 +78,30 @@ public class Task {
       this.end = end;
       this.interval = interval;
    }
+   public int nextTimeAfter(int current) {
+      if (!active) {
+         return -1;
+      }
+      int startTime = this.start;
+      int endTime = this.end;
+      if (!isRepeated()) {
+         endTime = this.time;
+         startTime = this.time;
+      }
+      if (current >= endTime) {
+         return -1;
+      }
+      if (current < startTime) {
+         return startTime;
+      }
+
+      int curr = startTime;
+      while (curr <= current) {
+         curr += interval;
+      }
+      if (curr >= endTime) {
+         return -1;
+      }
+      return curr;
+   }
 }
