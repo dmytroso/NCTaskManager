@@ -46,30 +46,35 @@ public class Task {
    public void setTime(int time) {
       this.time = time;
    }
+   
    public boolean isRepeated() {
       if (time == 0) {
          return true;
       }
       return false;
    }
+   
    public int getStartTime() {
       if(isRepeated()) {
          return start;
       }
       return time;
    }
+   
    public int getEndTime() {
       if(isRepeated()) {
          return end;
       }
       return time;
    }
+   
    public int getRepeatInterval() {
       if(!isRepeated()) {
          return 0;
       }
       return interval;
    }
+   
    public void setTime(int start, int end, int interval) {
       if(!isRepeated()) {
          time = 0;
@@ -78,6 +83,7 @@ public class Task {
       this.end = end;
       this.interval = interval;
    }
+   
    public int nextTimeAfter(int current) {
       if (!active) {
          return -1;
