@@ -51,4 +51,16 @@ public class ArrayTaskList {
         }
         return arreyTasks[index];
     }
+
+    public ArrayTaskList incoming(int from, int to) {
+       ArrayTaskList arrayTaskList = new ArrayTaskList();
+        for (Task arreyTask : arreyTasks) {
+            if (arreyTask.nextTimeAfter(from) != -1 && arreyTask.getEndTime() <= to) {
+                if (arreyTask.isActive()) {
+                    arrayTaskList.add(arreyTask);
+                }
+            }
+        }
+        return arrayTaskList;
+    }
 }
