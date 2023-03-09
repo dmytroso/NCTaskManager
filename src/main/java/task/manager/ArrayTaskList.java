@@ -45,7 +45,7 @@ public class ArrayTaskList {
         }
         return size;
     }
-    public Task getTask(int index) {
+    public Task getTask(int index) throws IndexOutOfBoundsException {
         if(index < 0 || index > arreyTasks.length) {
             throw new IndexOutOfBoundsException("index is out if bounds");
         }

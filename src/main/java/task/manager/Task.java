@@ -11,9 +11,9 @@ public class Task {
    private boolean active;
    private boolean repeated;
 
-   public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws InstantiationException{
+   public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException{
       if (interval < 0) {
-         throw new  InstantiationError("Interval must be more then 0");
+         throw new IllegalArgumentException("Interval must be more then 0");
       }
       this.title = title;
       this.start = start;
@@ -22,8 +22,10 @@ public class Task {
       this.repeated = true;
    }
 
-   public Task(String title, LocalDateTime time) throws InstantiationException {
-
+   public Task(String title, LocalDateTime time) throws IllegalArgumentException {
+      if (time == null) {
+         throw new IllegalArgumentException("Time cannot be null");
+      }
       this.title = title;
       this.time = time;
       this.repeated = false;
@@ -77,7 +79,6 @@ public class Task {
       return 0;
    }
 
-   // A method for changing the task execution time, if the task is no repeated it will be converted to repeated
    public void setTime(LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException {
       if (interval < 0) {
          throw new IllegalArgumentException("interval must be > 0 ");
