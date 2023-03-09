@@ -57,21 +57,25 @@ public class Task {
    public void setTime(LocalDateTime time) {
       this.time = time;
    }
+   
    public boolean isRepeated() {
       return repeated;
    }
+
    public LocalDateTime getStartTime() {
       if(repeated) {
          return start;
       }
       return time;
    }
+
    public LocalDateTime getEndTime() {
       if(repeated) {
          return end;
       }
       return time;
    }
+   
    public int getRepeatInterval() {
       if(repeated) {
          return interval;
@@ -90,7 +94,9 @@ public class Task {
       this.end = end;
       this.interval = interval;
    }
+
    public LocalDateTime nextTimeAfter(LocalDateTime current) {
+
       if (!active) {
          return null;
       } else {
