@@ -1,23 +1,32 @@
 package task.manager;
 
+import java.time.LocalDateTime;
+
 public class Task {
    private String title;
-   private int time;
-   private int start;
-   private int end;
+   private LocalDateTime time;
+   private LocalDateTime start;
+   private LocalDateTime end;
    private int interval;
    private boolean active;
+   private boolean repeated;
 
-   public Task(String title, int start, int end, int interval) {
+   public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws InstantiationException{
+      if (interval < 0) {
+         throw new  InstantiationError("Interval must be more then 0");
+      }
       this.title = title;
       this.start = start;
       this.end = end;
       this.interval = interval;
+      this.repeated = true;
    }
 
-   public Task(String title, int time) {
+   public Task(String title, LocalDateTime time) throws InstantiationException {
+
       this.title = title;
       this.time = time;
+      this.repeated = false;
    }
 
    public String getTitle() {
@@ -36,72 +45,67 @@ public class Task {
       this.active = active;
    }
 
-   public int getTime() {
-      if(isRepeated()) {
+   public LocalDateTime getTime() {
+      if(repeated) {
          return start;
       }
       return time;
    }
 
-   public void setTime(int time) {
+   public void setTime(LocalDateTime time) {
       this.time = time;
    }
    public boolean isRepeated() {
-      if (time == 0) {
-         return true;
-      }
-      return false;
+      return repeated;
    }
-   public int getStartTime() {
-      if(isRepeated()) {
+   public LocalDateTime getStartTime() {
+      if(repeated) {
          return start;
       }
       return time;
    }
-   public int getEndTime() {
-      if(isRepeated()) {
+   public LocalDateTime getEndTime() {
+      if(repeated) {
          return end;
       }
       return time;
    }
    public int getRepeatInterval() {
-      if(!isRepeated()) {
-         return 0;
+      if(repeated) {
+         return interval;
       }
-      return interval;
+      return 0;
    }
-   public void setTime(int start, int end, int interval) {
-      if(!isRepeated()) {
-         time = 0;
+
+   // A method for changing the task execution time, if the task is no repeated it will be converted to repeated
+   public void setTime(LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException {
+      if (interval < 0) {
+         throw new IllegalArgumentException("interval must be > 0 ");
+      }
+      if (!repeated) {
+         this.repeated = true;
       }
       this.start = start;
       this.end = end;
       this.interval = interval;
    }
-   public int nextTimeAfter(int current) {
+   public LocalDateTime nextTimeAfter(LocalDateTime current) {
       if (!active) {
-         return -1;
+         return null;
+      } else {
+         if (!repeated) {
+            if (current.isAfter(time) || current.isEqual(time)) {
+               return null;
+            }
+            return time;
+         } else {
+            for (LocalDateTime i = start; i.isBefore(end) || i.isEqual(end); i = i.plusSeconds(interval)) {
+               if (current.isBefore(i)) {
+                  return i;
+               }
+            }
+            return null;
+         }
       }
-      int startTime = this.start;
-      int endTime = this.end;
-      if (!isRepeated()) {
-         endTime = this.time;
-         startTime = this.time;
-      }
-      if (current >= endTime) {
-         return -1;
-      }
-      if (current < startTime) {
-         return startTime;
-      }
-
-      int curr = startTime;
-      while (curr <= current) {
-         curr += interval;
-      }
-      if (curr >= endTime) {
-         return -1;
-      }
-      return curr;
    }
 }
